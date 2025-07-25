@@ -17,7 +17,7 @@ function GetRecommendations() {
     const weatherIconMap = {
         sunny: '/weather-clear.svg',
         cloudy: '/weather-few-clouds.svg',
-        raining: '/weather-showers-scatter.svg',
+        raining: '/weather-showers-scattered.svg',
         snowing: '/sivvus_weater_symbols_5.svg'
     };
 
