@@ -1,5 +1,7 @@
 # WhatToDoToday
 
+## Utilized: ReactJS, CSS
+
 ### This application allows you to get recommendations for what to do today in a Canadian city based on the weather.
 
 ### I utilize 2 API calls to open-meteo.com, first one to get the coordinates of a city, and the second to recieve the weather data for that day.
