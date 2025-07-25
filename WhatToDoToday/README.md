@@ -1,12 +1,11 @@
-# React + Vite
+# WhatToDoToday
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Utilized: ReactJS, CSS
 
-Currently, two official plugins are available:
+### This application allows you to get recommendations for what to do today in a Canadian city based on the weather.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### I utilize 2 API calls to open-meteo.com, first one to get the coordinates of a city, and the second to recieve the weather data for that day.
 
-## Expanding the ESLint configuration
+### I then make an OpenAI API call to a chatgpt model to ask for 5 recommendations on what to do today based on the weather data.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### To run this program in its current state, please ensure that you have your own OpenAI API Key and you refernce it as a .env variable.
