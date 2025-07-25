@@ -1,6 +1,6 @@
 # WhatToDoToday
 
-## Utilized: ReactJS, CSS
+## Utilized: ReactJS, CSS, and JavaScript
 
 ### This application allows you to get recommendations for what to do today in a Canadian city based on the weather.
 
@@ -8,4 +8,4 @@
 
 ### I then make an OpenAI API call to a chatgpt model to ask for 5 recommendations on what to do today based on the weather data.
 
-### To run this program in its current state, please ensure that you have your own OpenAI API Key and you refernce it as a .env variable.
+### Program Deployed on Vercel, check it out at https://what-to-do-today-hazel.vercel.app/
