@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
 
-const OpenAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY
-
 function GetRecommendations() {
 
     const [city, setCity] = useState('');
@@ -127,47 +125,22 @@ function GetRecommendations() {
         setAILoading(true);
         if(!weatherData) return;
         try{
-            const messages = [
-                {role: 'system', content: `You are an activity recommender that suggests activities based on given weather data, respond with a signle JSON object eactly in this format.
-                    
-                    {
-                        "weather": "<short description of today's weather>",
-                        "keyword": "<one of these four options based on the weather, sunny, cloudy, raining, snowing>",
-                        "activities": [
-                            {
-                            "name": "<activity name>",
-                            "description": "<brief description of the activity>",
-                            "location": "<where it happens, address if possible>"
-                            }
-                        ]
-                    }`
+            const response = await fetch('/api/openai', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                {
-                    role: 'user',
-                    content:`Hello, I am in ${city}, ${province}, Here is the weather data for the day in JSON format: ${weatherData} \n Please first describe the weather for today and then 
-                            recommend 5 activities suitable for today's weather, provide them with the name of the location,
-                             a description of the event, and where its located. Here is the JSON format I want you to follow`
-                
-                }
-            ];
-            const APIBody = {
-                model: "o4-mini",
-                messages,
-                temperature: 1
-        };
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${OpenAI_API_KEY}`
-            },
-            body: JSON.stringify(APIBody)
-        });
-        const json = await response.json();
-        console.log(json);
-        const resp = json.choices[0].message.content;
-        const parsedresp = JSON.parse(resp);
-        return parsedresp;
+                body: JSON.stringify({
+                    city,
+                    province,
+                    weatherData
+                })
+            });
+            if(!response.ok){
+                throw new Error(`Failed to get AI response: ${response.status}`);
+            }
+            const parsedresp = await response.json();
+            return parsedresp
     } catch (error){
         console.error('OpenAI API error:', error);
     } finally {
