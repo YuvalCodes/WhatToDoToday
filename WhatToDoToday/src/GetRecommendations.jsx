@@ -6,13 +6,26 @@ function GetRecommendations() {
 
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
-    const [coords, setCoords] = useState({});
+    const [coords, setCoords] = useState(null);
     const [weatherData, setWeatherData] = useState('');
-    const [aiResponse, setAIResponse] = useState('');
+    const [aiResponse, setAIResponse] = useState({
+        weather: "",
+        keyword: "",
+        activities: []
+    });
+    const[keyword, setKeyword] = useState('');
+    const[aiLoading, setAILoading] = useState(false);
+
+    const weatherIconMap = {
+        sunny: '/weather-clear.svg',
+        cloudy: '/weather-few-clouds.svg',
+        raining: '/weather-showers-scatter.svg',
+        snowing: '/sivvus_weater_symbols_5.svg'
+    };
 
     useEffect(() => {
         async function fetchWeather() {
-            if(!coords) return;
+            if(!coords?.latitude) return;
             try{
                 const data = await getWeatherData(coords.latitude, coords.longitude);
                 setWeatherData(JSON.stringify(data));
@@ -28,14 +41,17 @@ function GetRecommendations() {
             if(!weatherData) return;
             try {
                 const AIresult = await getRecommendations();
-                const reply = AIresult.choices?.[0]?.message?.content;
-                setAIResponse(reply);
+                setAIResponse(AIresult);
             } catch (error){
                 console.log(error);
             }
         }
         fetchRecommendations();
     }, [weatherData]);
+
+    useEffect(() => {
+        setKeyword(aiResponse.keyword);
+    }, [aiResponse]);
 
     function handleCityChange(event){
         setCity(event.target.value)
@@ -108,15 +124,29 @@ function GetRecommendations() {
     }
 
     async function getRecommendations() {
+        setAILoading(true);
         if(!weatherData) return;
         try{
             const messages = [
-                {role: 'system', content: 'You are an activity recommender that suggests activities based on given weather data.'},
+                {role: 'system', content: `You are an activity recommender that suggests activities based on given weather data, respond with a signle JSON object eactly in this format.
+                    
+                    {
+                        "weather": "<short description of today's weather>",
+                        "keyword": "<one of these four options based on the weather, sunny, cloudy, raining, snowing>",
+                        "activities": [
+                            {
+                            "name": "<activity name>",
+                            "description": "<brief description of the activity>",
+                            "location": "<where it happens, address if possible>"
+                            }
+                        ]
+                    }`
+                },
                 {
                     role: 'user',
                     content:`Hello, I am in ${city}, ${province}, Here is the weather data for the day in JSON format: ${weatherData} \n Please first describe the weather for today and then 
                             recommend 5 activities suitable for today's weather, provide them with the name of the location,
-                             a description of the event, and where its located.`
+                             a description of the event, and where its located. Here is the JSON format I want you to follow`
                 
                 }
             ];
@@ -133,23 +163,46 @@ function GetRecommendations() {
             },
             body: JSON.stringify(APIBody)
         });
-        const result = await response.json();
-        return result;
+        const json = await response.json();
+        console.log(json);
+        const resp = json.choices[0].message.content;
+        const parsedresp = JSON.parse(resp);
+        return parsedresp;
     } catch (error){
-        console.error('OpenAI API error:', err);
+        console.error('OpenAI API error:', error);
+    } finally {
+        setAILoading(false);
     }
 }
 
     
 
     return(
+        <>
+        <h1 className="title-wtdt">What To do Today?</h1>
         <div className="city-province-input-container">
-            <input type="text" value={city} onChange={handleCityChange}/>
-            <input type="text" value={province} onChange={handleProvinceChange}/>
-            <button onClick={findCoordinates}>Get Recommendations!</button>
-            <p>{aiResponse}</p>
+            <input className="city-input" type="text" value={city} onChange={handleCityChange} placeholder='Canadian city'/>
+            <input className= "province-input" type="text" value={province} onChange={handleProvinceChange} placeholder='Province/Territory'/>
+            <button className="gr-button" onClick={findCoordinates}>Get Recommendations!</button>
         </div>
-    )
+        <div className= "weather-activities-container">
+            {aiLoading ? <p>Loading response...</p> : null}
+            <h2>Weather</h2>
+            {keyword ? <img src={weatherIconMap[keyword]} alt={keyword} className="weather-icon"/> : null}
+            <p className="weather-desc">{aiResponse.weather}</p>
+            <h2>Activities</h2>
+            <ul>
+                {aiResponse.activities.map((a,i) => (
+                    <li key= {i}>
+                        <strong className="act-name">{a.name}</strong>
+                        <p className="act-desc">{a.description}</p>
+                        <em className="act-location">{a.location}</em>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        </>
+    );
 
 }
 

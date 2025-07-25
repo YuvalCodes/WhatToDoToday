@@ -1,0 +1,95 @@
+.title-wtdt{
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.city-province-input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.city-province-input-container input{
+    width: 200px;
+    height: 25px;
+    border-radius: 10px;
+    padding: 5px;
+    border: 3px solid grey;
+    font-family: sans-serif;
+    color:black
+}
+
+.gr-button{
+    font-size: 1.3rem;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 10px 20px;
+    color:whitesmoke;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    background-color: hsl(216, 92%, 61%)
+}
+
+.gr-button:hover{
+    background-color: hsl(216, 92%, 51%)
+}
+
+.weather-activities-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: sans-serif;
+}
+
+.weather-desc{
+    font-size: 1.3rem;
+}
+
+
+.weather-activities-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.weather-activities-container li {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0; 
+}
+
+
+.act-name {
+  display: block;           
+  font-size: 1.25rem;       
+  margin-bottom: 0.25rem;
+  color: #2c3e50;
+}
+
+
+.act-desc {
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+  color: #4a4a4a;
+}
+
+
+.act-location {
+  display: block;
+  font-style: italic;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.weather-icon {
+    width: 80px;
+    height: 80px;
+}
+
+
